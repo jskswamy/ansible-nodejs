@@ -1,0 +1,8 @@
+---
+# defaults file for ansible-nodejs
+ansible_nodejs_download_dir: '~/.ansible/download'
+ansible_nodejs_version: 'v0.12.2'
+ansible_nodejs_install_base_dir: '/opt/nodejs'
+ansible_nodejs_package: "node-{{ ansible_nodejs_version }}-linux-x64.tar.gz"
+ansible_nodejs_install_dir: "{{ ansible_nodejs_install_base_dir }}/node-{{ ansible_nodejs_version }}-linux-x64"
+ansible_nodejs_sha256sum: '4e1578efc2a2cc67651413a05ccc4c5d43f6b4329c599901c556f24d93cd0508'
