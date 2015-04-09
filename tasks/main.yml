@@ -22,12 +22,18 @@
 
 - name: append nodejs to PATH
   lineinfile:
-    dest=~/.bashrc
+    dest=~/.bashrc state=present insertafter=EOF create=true
     line="export PATH={{ ansible_nodejs_install_dir }}/bin:$PATH"
     regexp="^export\s+PATH=/opt/nodejs.*"
-    state=present
-    insertafter=EOF
-    create=true
+
+- name: config npm mirror for root
+  shell: "{{ ansible_nodejs_install_dir }}/bin/npm set  registry {{ ansible_nodejs_npm_mirror }}"
+  when: ansible_nodejs_npm_mirror is defined
+  sudo: yes
+
+- name: config npm mirror for remote user
+  shell: "{{ ansible_nodejs_install_dir }}/bin/npm set  registry {{ ansible_nodejs_npm_mirror }}"
+  when: ansible_nodejs_npm_mirror is defined
 
 - name: install global packages
   npm: executable={{ ansible_nodejs_install_dir }}/bin/npm name={{ item }} global=yes state=present

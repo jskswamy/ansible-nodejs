@@ -3,5 +3,5 @@
 - hosts: all
   roles:
     - role: ansible-nodejs
-      ansible_nodejs_global_pkgs:
-        - forever
+      ansible_nodejs_npm_mirror: 'http://registry.npm.taobao.org'
+      ansible_nodejs_global_pkgs: [forever]
