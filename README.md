@@ -17,11 +17,13 @@ Role Variables
 
     Installation prefix that will be used at the hosts. Defaults to `/opt/nodejs`.
 
-- ** ansible_nodejs_sha256sum**:
+- **ansible_nodejs_sha256sum**:
 
    Nodejs package sha256sum, v0.12.2's sha256sum is : `4e1578efc2a2cc67651413a05ccc4c5d43f6b4329c599901c556f24d93cd0508`.
 
+- **ansible_nodejs_global_pkgs**:
 
+   Nodejs global packages to install, defaults to: `[]`
 
 
 Example Playbook
@@ -32,6 +34,8 @@ Example Playbook
     - role: ansible-nodejs
       ansible_nodejs_version: 'v0.12.2'
       ansible_nodejs_sha256sum: '4e1578efc2a2cc67651413a05ccc4c5d43f6b4329c599901c556f24d93cd0508'
+      ansible_nodejs_global_pkgs:
+        - forever
 
 ```
 License

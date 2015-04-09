@@ -4,11 +4,11 @@
                         dest="{{ ansible_nodejs_download_dir }}/{{ ansible_nodejs_package }}"
                         sha256sum="{{ ansible_nodejs_sha256sum }}"
 
-- name: install libselinux-python when os family is RedHat
+- name: install libselinux-python when OS is CentOS
   yum: name=libselinux-python state=present
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   sudo: yes
-- name: "insure {{ansible_nodejs_install_base_dir}} must exist"
+- name: "insure {{ansible_nodejs_install_base_dir}} exists"
   file: path="{{ansible_nodejs_install_base_dir}}" state="directory"
   sudo: yes
 
@@ -28,3 +28,9 @@
     state=present
     insertafter=EOF
     create=true
+
+- name: install global packages
+  npm: executable={{ ansible_nodejs_install_dir }}/bin/npm name={{ item }} global=yes state=present
+  with_items: ansible_nodejs_global_pkgs
+  when: ansible_nodejs_global_pkgs is defined
+  sudo: yes

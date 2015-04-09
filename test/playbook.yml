@@ -3,3 +3,5 @@
 - hosts: all
   roles:
     - role: ansible-nodejs
+      ansible_nodejs_global_pkgs:
+        - forever
