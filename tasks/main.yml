@@ -1,6 +1,10 @@
 ---
+- name: create nodejs download dir
+  file: path="{{ ansible_nodejs_download_dir }}" state=directory owner={{ansible_user_id}} group={{ansible_user_id}}
+  sudo: yes
+
 - name: download nodejs package
-  local_action: get_url url="http://nodejs.org/dist/{{ ansible_nodejs_version }}/{{ ansible_nodejs_package }}"
+  get_url: url="http://nodejs.org/dist/{{ ansible_nodejs_version }}/{{ ansible_nodejs_package }}"
                         dest="{{ ansible_nodejs_download_dir }}/{{ ansible_nodejs_package }}"
                         sha256sum="{{ ansible_nodejs_sha256sum }}"
 
@@ -8,6 +12,7 @@
   yum: name=libselinux-python state=present
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
   sudo: yes
+
 - name: "insure {{ansible_nodejs_install_base_dir}} exists"
   file: path="{{ansible_nodejs_install_base_dir}}" state="directory"
   sudo: yes
@@ -18,6 +23,7 @@
     dest="{{ansible_nodejs_install_base_dir}}"
     creates="{{ansible_nodejs_install_dir}}/bin/node"
     force=no
+    copy=no
   sudo: yes
 
 - name: append nodejs to PATH
@@ -39,4 +45,11 @@
   npm: executable={{ ansible_nodejs_install_dir }}/bin/npm name={{ item }} global=yes state=present
   with_items: ansible_nodejs_global_pkgs
   when: ansible_nodejs_global_pkgs is defined
+  sudo: yes
+
+- name: link nodejs binary
+  file: src="{{ ansible_nodejs_install_dir }}/bin/{{ item.src }}" dest=/usr/local/bin/{{ item.dest }} state=link
+  with_items:
+    - { src: 'node', dest: 'node' }
+    - { src: 'npm', dest: 'npm' }
   sudo: yes
